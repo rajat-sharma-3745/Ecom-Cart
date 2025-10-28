@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed": "node seeder.js",
     "start": "node --watch server.js"
-  },
+     },
   "keywords": [],
   "author": "",
   "license": "ISC",
