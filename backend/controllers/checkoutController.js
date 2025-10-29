@@ -7,5 +7,5 @@ export const processCheckout = asyncHandler(async(req,res) => {
       total,
       timestamp: new Date(),
     };
-    res.json(receipt);
+    res.json({success:true,receipt});
 })

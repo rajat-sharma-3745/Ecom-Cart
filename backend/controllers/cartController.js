@@ -7,18 +7,27 @@ const userId = "mockUser1";
 
 
 export const getCart = asyncHandler(async (req, res, next) => {
-    const cart = await Cart.find({ userId }).populate('items.productId');// items is an array of products(objects) mongoose automatically loops through and populate each product id.
+    const cart = await Cart.findOne({ userId }).populate("items.productId", "_id name price image");// items is an array of products(objects) mongoose automatically loops through and populate each product id.
+
     if (!cart) {
-        return res.json({ items: [], total: 0 });
+        return res.json({ items: [] });
     }
+    const cartObj = cart.toObject();
+    cartObj.items = cart.items.map(item => ({
+        productId:item.productId._id,
+        qty: item.qty,
+        name: item.productId?.name,
+        image: item.productId?.image,
+        price: item.productId?.price,
+    }));
     const total = cart.items.reduce(
         (sum, item) => sum + item.price * item.qty,
         0
     );
-    res.json({ items: cart.items, total });
+    res.json({ items: cartObj.items });
 })
 export const addToCart = asyncHandler(async (req, res, next) => {
-    const { productId, qty } = req.body;
+    const { productId, qty = 1 } = req.body;
 
     if (!productId || !qty || Number(qty) <= 0) {
         return next(new ApiError("Invalid product ID or quantity", 400))
@@ -61,28 +70,33 @@ export const removeFromCart = asyncHandler(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Product removed successfully',
-        items:cart.items
+        items: cart.items
     })
 })
 
-export const updateCartQuantity = asyncHandler(async(req,res,next)=>{
-     const {productId,qty} = req.body;
-     const cart = await Cart.findOne({userId});
-     if (!cart) {
+export const updateCartQuantity = asyncHandler(async (req, res, next) => {
+    const { productId, qty } = req.body;
+    const cart = await Cart.findOne({ userId });
+    if (!cart) {
         return next(new ApiError('Cart not found', 400))
-    } 
+    }
 
-    const item = cart.items.find(item=>item.productId.toString()===productId);
-    if(!item) return next(new ApiError('Item not found in cart',400));
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    if (!item) return next(new ApiError('Item not found in cart', 400));
 
-    if(qty>0){
-        item.qty=qty
-    }else{
+    if (qty > 0) {
+        item.qty = qty
+    } else {
         cart.items = cart.items.filter(
-        (i) => i.productId.toString() !== productId
-      );
+            (i) => i.productId.toString() !== productId
+        );
     }
     await cart.save();
-     res.json({ message: "Cart updated", items: cart.items });
+    res.json({success:true, message: "Cart updated", items: cart.items });
 
+})
+
+export const deleteCart = asyncHandler(async (req, res) => {
+  await Cart.deleteOne({ userId });
+  res.json({success:true, message: "Cart cleared" });
 })
