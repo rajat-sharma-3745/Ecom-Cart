@@ -11,6 +11,7 @@ await mongoose.connect(process.env.MONGO_URI)
 
 const seedData = async() =>{
     try {
+        await Product.deleteMany();
         await Product.insertMany(products);
         console.log("Product data seeded successfully");
         process.exit();
