@@ -1,26 +1,31 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Cart from './pages/Cart'
-import Checkout from './pages/Checkout'
-import Home from './pages/Home'
-import Header from './components/Header'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Home from "./pages/Home";
+import Layout from "./components/Layout";
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/cart",
+          element: <Cart />,
+        },
+        {
+          path: "/checkout",
+          element: <Checkout />,
+        },
+      ],
+    },
+  ]);
 
-  const router= createBrowserRouter([
-    {
-      path:'/',
-      element:<Header/>
-    },
-    {
-      path:'/cart',
-      element:<Cart/>
-    },
-    {
-      path:'/checkout',
-      element:<Checkout/>
-    },
-  ])
-
-  return <RouterProvider router={router}/>
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
