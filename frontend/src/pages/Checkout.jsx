@@ -47,7 +47,7 @@ const Checkout = () => {
           >
             <div>
               <h4 className="font-medium">{product.name}</h4>
-              <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet</p>
+              {/* <p className="text-sm text-gray-500">Lorem ipsum dolor sit amet</p> */}
             </div>
             <span className="font-medium">${product?.price*product?.qty}</span>
           </div>
