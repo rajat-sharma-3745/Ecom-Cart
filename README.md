@@ -82,7 +82,7 @@ npm run dev
 
 ## Demo & Screenshots
 
-Below are a few screenshots from the live deployed site:
+Below are a few screenshots:
 
 <!-- Replace these with your actual images from your `/assets` or `screenshots` folder -->
 ![Homepage](./screenshots/ProductGrid.png)  
